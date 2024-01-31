@@ -4,21 +4,23 @@ import 'package:auth_app/components/square_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final Function()? onTap;
-  const LoginPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
 
-  // sign user
-  void signUserIn() async {
+  final confirmPasswordController = TextEditingController();
+
+  // sign user up
+  void signUserUp() async {
     showDialog(
         context: context,
         builder: (context) {
@@ -27,41 +29,59 @@ class _LoginPageState extends State<LoginPage> {
           );
         });
 
+    // try creating user
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
+      if (passwordController.text == confirmPasswordController.text) {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+      } else {
+        // Navigator.pop(context);
+        showErrorMsg("Passwords don't match!");
+      }
       // pop the loading circle
       Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
-      if (e.code == 'invalid-credential') {
-        // print('No user found for that email');
-        wrongCredentialsMsg();
-      } else {
-        // print("Login failed");
-        loginFailed();
-      }
+      showErrorMsg(e.code);
     }
   }
 
-  void wrongCredentialsMsg() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            title: Text("Wrong Credentials"),
-          );
-        });
-  }
+  // void wrongCredentialsMsg() {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return const AlertDialog(
+  //           title: Text("Wrong Credentials"),
+  //         );
+  //       });
+  // }
 
-  void loginFailed() {
+  // void loginFailed() {
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return const AlertDialog(
+  //           title: Text("Login Failed"),
+  //         );
+  //       });
+  // }
+
+  void showErrorMsg(String text) {
     showDialog(
         context: context,
         builder: (context) {
-          return const AlertDialog(
-            title: Text("Login Failed"),
+          return AlertDialog(
+            backgroundColor: Colors.grey[700],
+            title: Center(
+              child: Text(
+                text,
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
           );
         });
   }
@@ -91,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   Text(
-                    "Welcome back you've been missed!",
+                    "Let's create an account for you!",
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontSize: 16,
@@ -122,13 +142,38 @@ class _LoginPageState extends State<LoginPage> {
                     height: 10,
                   ),
 
+                  MyTextField(
+                    controller: confirmPasswordController,
+                    hintText: 'Confirm Password',
+                    obscureText: true,
+                  ),
+
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "Forgot Password?",
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
                   const SizedBox(
                     height: 25,
                   ),
 
                   MyButton(
-                    onTap: signUserIn,
-                    text: "Sign In",
+                    onTap: signUserUp,
+                    text: "Sign Up",
                   ),
 
                   const SizedBox(
@@ -195,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Not a member?",
+                        "Already have an account?",
                         style: TextStyle(
                           color: Colors.grey[700],
                         ),
@@ -206,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
                       GestureDetector(
                         onTap: widget.onTap,
                         child: const Text(
-                          "Register now",
+                          "Login now",
                           style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,

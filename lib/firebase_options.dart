@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -14,18 +15,54 @@ import 'package:flutter/foundation.dart'
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
 /// ```
+///
+///
+
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
+    // String? firebaseWebApiKey = dotenv.env['FIREBASE_WEB_API_KEY'];
+
     if (kIsWeb) {
-      return web;
+      return FirebaseOptions(
+        apiKey: dotenv.env['FIREBASE_WEB_API_KEY'] ?? "",
+        appId: '1:1045863495888:web:45fc2b8748af318ee5c6d5',
+        messagingSenderId: '1045863495888',
+        projectId: 'flutter-auth-7bfa6',
+        authDomain: 'flutter-auth-7bfa6.firebaseapp.com',
+        storageBucket: 'flutter-auth-7bfa6.appspot.com',
+      );
     }
+
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
+        return FirebaseOptions(
+          apiKey: dotenv.env['FIREBASE_ANDROID_API_KEY'] ?? "",
+          appId: '1:1045863495888:android:dc5c49dc33e3c0c8e5c6d5',
+          messagingSenderId: '1045863495888',
+          projectId: 'flutter-auth-7bfa6',
+          storageBucket: 'flutter-auth-7bfa6.appspot.com',
+        );
+
       case TargetPlatform.iOS:
-        return ios;
+        return FirebaseOptions(
+          apiKey: dotenv.env['FIREBASE_IOS_API_KEY'] ?? "",
+          appId: '1:1045863495888:ios:d015b61319b5c27be5c6d5',
+          messagingSenderId: '1045863495888',
+          projectId: 'flutter-auth-7bfa6',
+          storageBucket: 'flutter-auth-7bfa6.appspot.com',
+          iosBundleId: 'com.example.authApp',
+        );
+
       case TargetPlatform.macOS:
-        return macos;
+        return FirebaseOptions(
+          apiKey: dotenv.env['FIREBASE_MACOS_API_KEY'] ?? "",
+          appId: '1:1045863495888:ios:0ddc7bbd287c4c46e5c6d5',
+          messagingSenderId: '1045863495888',
+          projectId: 'flutter-auth-7bfa6',
+          storageBucket: 'flutter-auth-7bfa6.appspot.com',
+          iosBundleId: 'com.example.authApp.RunnerTests',
+        );
+
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,38 +80,38 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDy7Cggoe8zZWey7iACrB8y71kSEI_l2rk',
-    appId: '1:1045863495888:web:45fc2b8748af318ee5c6d5',
-    messagingSenderId: '1045863495888',
-    projectId: 'flutter-auth-7bfa6',
-    authDomain: 'flutter-auth-7bfa6.firebaseapp.com',
-    storageBucket: 'flutter-auth-7bfa6.appspot.com',
-  );
+  // static const FirebaseOptions web = FirebaseOptions(
+  //   apiKey:  firebaseWebApiKey ?? "",
+  //   appId: '1:1045863495888:web:45fc2b8748af318ee5c6d5',
+  //   messagingSenderId: '1045863495888',
+  //   projectId: 'flutter-auth-7bfa6',
+  //   authDomain: 'flutter-auth-7bfa6.firebaseapp.com',
+  //   storageBucket: 'flutter-auth-7bfa6.appspot.com',
+  // );
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD4nUixnnxHQIene9AbYn2yHj-XFVow08Y',
-    appId: '1:1045863495888:android:dc5c49dc33e3c0c8e5c6d5',
-    messagingSenderId: '1045863495888',
-    projectId: 'flutter-auth-7bfa6',
-    storageBucket: 'flutter-auth-7bfa6.appspot.com',
-  );
+  // static const FirebaseOptions android = FirebaseOptions(
+  //   apiKey: 'AIzaSyD4nUixnnxHQIene9AbYn2yHj-XFVow08Y',
+  //   appId: '1:1045863495888:android:dc5c49dc33e3c0c8e5c6d5',
+  //   messagingSenderId: '1045863495888',
+  //   projectId: 'flutter-auth-7bfa6',
+  //   storageBucket: 'flutter-auth-7bfa6.appspot.com',
+  // );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCvqF-YR7GUTXnBPUy6FMGM9y-HfpSPBe4',
-    appId: '1:1045863495888:ios:d015b61319b5c27be5c6d5',
-    messagingSenderId: '1045863495888',
-    projectId: 'flutter-auth-7bfa6',
-    storageBucket: 'flutter-auth-7bfa6.appspot.com',
-    iosBundleId: 'com.example.authApp',
-  );
+  // static const FirebaseOptions ios = FirebaseOptions(
+  //   apiKey: 'AIzaSyCvqF-YR7GUTXnBPUy6FMGM9y-HfpSPBe4',
+  //   appId: '1:1045863495888:ios:d015b61319b5c27be5c6d5',
+  //   messagingSenderId: '1045863495888',
+  //   projectId: 'flutter-auth-7bfa6',
+  //   storageBucket: 'flutter-auth-7bfa6.appspot.com',
+  //   iosBundleId: 'com.example.authApp',
+  // );
 
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCvqF-YR7GUTXnBPUy6FMGM9y-HfpSPBe4',
-    appId: '1:1045863495888:ios:0ddc7bbd287c4c46e5c6d5',
-    messagingSenderId: '1045863495888',
-    projectId: 'flutter-auth-7bfa6',
-    storageBucket: 'flutter-auth-7bfa6.appspot.com',
-    iosBundleId: 'com.example.authApp.RunnerTests',
-  );
+  // static const FirebaseOptions macos = FirebaseOptions(
+  //   apiKey: 'AIzaSyCvqF-YR7GUTXnBPUy6FMGM9y-HfpSPBe4',
+  //   appId: '1:1045863495888:ios:0ddc7bbd287c4c46e5c6d5',
+  //   messagingSenderId: '1045863495888',
+  //   projectId: 'flutter-auth-7bfa6',
+  //   storageBucket: 'flutter-auth-7bfa6.appspot.com',
+  //   iosBundleId: 'com.example.authApp.RunnerTests',
+  // );
 }
